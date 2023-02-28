@@ -100,7 +100,7 @@ module.exports.ForgotPasswordRoute = async (req, res) => {
                     to: email,
                     from: 'mdimranulhaque202@gmail.com',
                     subject: 'Please reset !',
-                    html: `To reset your passsword, click this link:${`${url_live}//new-password/${passwordResetCode}`}`,
+                    html: `To reset your passsword, click this link:${`${url_live}/new-password/${passwordResetCode}`}`,
                 })
             } catch (err) {
                 console.log(err);

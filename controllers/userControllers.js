@@ -4,6 +4,7 @@ const { validate, User } = require('../models/user')
 const { v4: uuid } = require('uuid')
 const { sendEmail } = require('../utils/sendEmail')
 
+
 module.exports.registerUser = async (req, res) => {
     const { name, email, password } = req.body;
     const { error } = validate({ name, email, password });
@@ -42,7 +43,7 @@ module.exports.registerUser = async (req, res) => {
     return res.status(201).send({
         message: "registration successfull",
         token: token,
-        user: _.pick(result, ['name', 'email','isVerified'])
+        user: _.pick(result, ['name', 'email', 'isVerified'])
     })
 }
 
@@ -58,24 +59,70 @@ module.exports.loginUser = async (req, res) => {
     return res.status(200).send({
         message: "login successfull",
         token: token,
-        user: _.pick(user, ['name', 'email','isVerified'])
+        user: _.pick(user, ['name', 'email', 'isVerified'])
     })
 }
 
 
 module.exports.verifyEmailRoute = async (req, res) => {
-    const {verificationString}=req.body;
+    const { verificationString } = req.body;
     let user = {}
     user = await User.findOne({ verificationString })
-    if(!user) return res.send("error")
-    const result = await User.updateOne({ verificationString }, {isVerified: true})
-    if(result.modifiedCount>0){
+    if (!user) return res.send("error")
+    const result = await User.updateOne({ verificationString }, { isVerified: true })
+    if (result.modifiedCount > 0) {
         const token = await user.generateJWT();
         return res.status(201).send({
             message: "verifited successfully !",
             token: token,
-            user: _.pick(user, ['name', 'email','isVerified'])
+            user: _.pick(user, ['name', 'email', 'isVerified'])
         })
     }
+
+}
+
+
+
+module.exports.ForgotPasswordRoute = async (req, res) => {
+    const { email } = req.params;
+    let user = await User.findOne({ email })
+    if (user) {
+
+        const passwordResetCode = uuid();
+
+        const result = await User.updateOne({ email }, { passwordResetCode })
+
+        if (result.modifiedCount > 0) {
+            const url = `http://localhost:3000/new-password/${passwordResetCode}`
+            try {
+                await sendEmail({
+                    to: email,
+                    from: 'mdimranulhaque202@gmail.com',
+                    subject: 'Please reset !',
+                    html: `To reset your passsword, click this link:${url}`,
+                })
+            } catch (err) {
+                console.log(err);
+                res.sendStatus(500);
+            }
+            return res.send(result)
+        }
+    }
+}
+
+
+module.exports.resetPasswordRoute = async (req, res) => {
+    const { passwordResetCode } = req.params;
+    const { new_password } = req.body
+    let user = {}
+    user = await User.findOne({ passwordResetCode })
+    // console.log(user)
+    const solt = await bcrypt.genSalt(10)
+    const newPasswordHash = await bcrypt.hash(new_password, solt)
+    const result = await User.updateOne({ passwordResetCode }, { passwordResetCode:"",password:newPasswordHash })
     
+    if(result.modifiedCount>0){
+        const token = user.generateJWT();
+       return res.send(_.pick(user, ['name', 'email', 'isVerified']))
+    }
 }

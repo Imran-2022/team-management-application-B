@@ -5,6 +5,9 @@ const { v4: uuid } = require('uuid')
 const { sendEmail } = require('../utils/sendEmail')
 
 
+const url_live='https://team-management-application.netlify.app'
+const url_local='http://localhost:3000'
+
 module.exports.registerUser = async (req, res) => {
     const { name, email, password } = req.body;
     const { error } = validate({ name, email, password });
@@ -22,7 +25,6 @@ module.exports.registerUser = async (req, res) => {
     const token = user.generateJWT();
     const result = await user.save();
 
-    const url = `http://localhost:3000/verify-email/${verificationString}`
     try {
         await sendEmail({
             to: email,
@@ -31,7 +33,7 @@ module.exports.registerUser = async (req, res) => {
             text: "Thanks for signing Up! to verifiy your email ----",
             html: `<div style="color:red">
             <p>Thanks for signing Up! to verifiy your email ----</p>
-            <button style="cursor:pointer"><a href=${url}>Click Here to Verify Email</a></button>
+            <button style="cursor:pointer"><a href=${`${url_live}/verify-email/${verificationString}`}>Click Here to Verify Email</a></button>
             </div> 
               `,
         })
@@ -93,13 +95,12 @@ module.exports.ForgotPasswordRoute = async (req, res) => {
         const result = await User.updateOne({ email }, { passwordResetCode })
 
         if (result.modifiedCount > 0) {
-            const url = `http://localhost:3000/new-password/${passwordResetCode}`
             try {
                 await sendEmail({
                     to: email,
                     from: 'mdimranulhaque202@gmail.com',
                     subject: 'Please reset !',
-                    html: `To reset your passsword, click this link:${url}`,
+                    html: `To reset your passsword, click this link:${`${url_live}//new-password/${passwordResetCode}`}`,
                 })
             } catch (err) {
                 console.log(err);

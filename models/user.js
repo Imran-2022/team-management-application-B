@@ -24,6 +24,12 @@ const userSchema = Schema({
         minLength: 5,
         maxLength: 1024
     },
+    isVerified:{
+        type: Boolean,
+        default: false
+    },
+    verificationString: String,
+    passwordResetCode: String,
 }, { timestamps: true }
 
 )
@@ -33,6 +39,8 @@ userSchema.methods.generateJWT = function () {
         _id: this._id,
         email: this.email,
         name: this.name,
+        verificationString:this.verificationString,
+        isVerified: this.isVerified,
     }, process.env.JWT_SECRET_KEY, { expiresIn: "7d" })
     return token;
 }

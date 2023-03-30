@@ -3,7 +3,8 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const morgan = require('morgan');
-const allRouter = require('./routers/router');
+const authRoute = require('./routers/authRouter');
+const teamRoute = require('./routers/teamRouter');
 
 app.use(express.json());
 app.use(cors());
@@ -12,7 +13,8 @@ if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
 }
 
-app.use('/api', allRouter);
+app.use('/api/auth', authRoute);
+app.use('/api/team', teamRoute);
 
 app.get('/', (req, res) => {
     res.send("hellow from dubai 🐸");

@@ -19,6 +19,9 @@ const teamSchema = Schema({
         required: true,
         maxLength: 32
     },
+    teamMembers:{
+        type:Array
+    }
    
 }, { timestamps: true }
 

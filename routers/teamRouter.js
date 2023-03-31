@@ -5,6 +5,7 @@ router.route('/')
     .get(getTeams)
     .post(addTeam)
 
+
 router.route('/:id')
     .get(getTeam)
     .delete(deleteTeam)

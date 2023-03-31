@@ -1,9 +1,12 @@
 const router = require('express').Router();
-const { registerUser, loginUser, verifyEmailRoute, ForgotPasswordRoute,resetPasswordRoute } = require('../controllers/userControllers');
+const { registerUser, loginUser, verifyEmailRoute, ForgotPasswordRoute, resetPasswordRoute, getUser } = require('../controllers/userControllers');
 const { authorize } = require('../middlewares/authorize');
 
 router.route('/registration')
     .post(registerUser)
+
+router.route('/user')
+    .get(getUser)
 
 router.route('/verify-email')
     .put(verifyEmailRoute)

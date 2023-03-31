@@ -127,3 +127,14 @@ module.exports.resetPasswordRoute = async (req, res) => {
        return res.send(_.pick(user, ['name', 'email', 'isVerified']))
     }
 }
+
+
+module.exports.getUser=async(req,res)=>{
+    const user = await User.find({})
+    const selectedUserData=user.map(dt=>{
+        const {name,email,_id}=dt;
+        return {name,email,_id}
+
+    })
+    res.send({data:selectedUserData})
+}

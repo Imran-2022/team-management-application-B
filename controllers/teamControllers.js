@@ -57,4 +57,3 @@ module.exports.updateTeam = async (req, res) => {
         return res.status(500).send({ message: 'Server error' });
     }
 }
-

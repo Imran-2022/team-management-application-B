@@ -21,7 +21,7 @@ module.exports.getTeams = async (req, res) => {
 }
 module.exports.getTeam = async (req, res) => {
     const _id = req.params.id;
-    const data = await Teams.find({ _id })
+    const data = await Teams.findOne({ _id })
     res.send(data)
 }
 

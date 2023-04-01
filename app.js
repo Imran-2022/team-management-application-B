@@ -5,6 +5,7 @@ const cors = require('cors');
 const morgan = require('morgan');
 const authRoute = require('./routers/authRouter');
 const teamRoute = require('./routers/teamRouter');
+const taskRoute = require('./routers/tasksRouter');
 
 app.use(express.json());
 app.use(cors());
@@ -15,6 +16,7 @@ if (process.env.NODE_ENV === 'development') {
 
 app.use('/api/auth', authRoute);
 app.use('/api/team', teamRoute);
+app.use('/api/tasks', taskRoute);
 
 app.get('/', (req, res) => {
     res.send("hellow from dubai 🐸");

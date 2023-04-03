@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt')
 const _ = require('lodash');
 const { Teams } = require('../models/team');
+const { sendEmail } = require('../utils/sendEmail');
 
 module.exports.addTeam = async (req, res) => {
     const team = new Teams(req.body);
@@ -49,6 +50,21 @@ module.exports.updateTeam = async (req, res) => {
 
         if (!updatedTeam) {
             return res.status(404).send({ message: 'Team not found' });
+        }
+
+        // send mail that you are added !!! please login - 
+        if (updatedTeam) {
+            try {
+                await sendEmail({
+                    to: teamEmail,
+                    from: 'mdimranulhaque202@gmail.com',
+                    subject: 'you are added into a team named please login to see more -  !',
+                    html: `web url - ${`https://team-management-application.netlify.app/`}`,
+                })
+            } catch (err) {
+                console.log(err);
+                res.sendStatus(500);
+            }
         }
 
         return res.status(200).send(newTeamMembers);

@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt')
 const _ = require('lodash');
 const { Teams } = require('../models/team');
 const { sendEmail } = require('../utils/sendEmail');
+const { Meet } = require('../models/meet');
 
 module.exports.addTeam = async (req, res) => {
     const team = new Teams(req.body);
@@ -109,4 +110,24 @@ module.exports.updateSupervisorReview = async (req, res) => {
         console.error(error);
         return res.status(500).send({ message: 'Server error' });
     }
+}
+module.exports.addMeet = async (req, res) => {
+    const teamId = req.params.id;
+    const dt = req.body;
+    // console.log(teamId,dt);
+    const meet = new Meet({scheduleNow:dt.scheduleNow,project_id:teamId});
+    // console.log(meet);
+    try {
+        const result = await meet.save();
+        return res.send(result);
+    } catch (err) {
+        console.log(err.message, "err0r");
+        return res.send({ error: err.message })
+    }
+   
+}
+module.exports.getMeet = async (req, res) => {
+    const _id = req.params.id;
+    const data = await Meet.findOne({project_id: _id })
+    res.send(data)
 }

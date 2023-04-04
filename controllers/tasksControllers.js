@@ -8,9 +8,9 @@ module.exports.getTasks = async (req, res) => {
 }
 module.exports.getTask = async (req, res) => {
     const id=req.params.id
-    const task = await Tasks.find({_id:id})
-    console.log(task);
-    // res.send(task)
+    const task = await Tasks.findOne({_id:id})
+    // console.log(task);
+    res.send(task)
 }
 
 module.exports.addTask = async (req, res) => {
@@ -34,6 +34,13 @@ module.exports.updateTaskStatus = async (req, res) => {
     if(result.modifiedCount>0){
        return res.send(req.body)
     }
+}
+module.exports.updateTask = async (req, res) => {
+    const id=req.params.id;
+    const dt=req.body;
+    const result = await Tasks.findOneAndUpdate({ _id: id }, dt, { new: true });
+    console.log(result);
+    res.send(result)
 }
 module.exports.deleteTask = async (req, res) => {
     const id=req.params.id;

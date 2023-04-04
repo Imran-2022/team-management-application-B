@@ -73,3 +73,40 @@ module.exports.updateTeam = async (req, res) => {
         return res.status(500).send({ message: 'Server error' });
     }
 }
+module.exports.updateSupervisor = async (req, res) => {
+    const teamId = req.params.id;
+    const newSupervisorEmail = req.body.email;
+    const dt = await Teams.findOne({ _id: teamId })
+
+    const newSupervisor = dt.supervisor;
+    newSupervisor.push(newSupervisorEmail);
+    try {
+        const updatedTeam = await Teams.updateOne(
+            { _id: teamId },
+            { $set: { supervisor: newSupervisor } },
+            { new: true }
+        );
+        if (!updatedTeam) {
+            return res.status(404).send({ message: 'Team not found' });
+        }
+        return res.status(200).send(newSupervisor);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send({ message: 'Server error' });
+    }
+}
+module.exports.updateSupervisorReview = async (req, res) => {
+    const teamId = req.params.id;
+    const dt = req.body;
+    // console.log(teamId,dt);
+    try {
+        const updatedTeam = await Teams.findOneAndUpdate({ _id: teamId },{ review:dt.review });
+        if (!updatedTeam) {
+            return res.status(404).send({ message: 'Team not found' });
+        }
+        return res.status(200).send(dt);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send({ message: 'Server error' });
+    }
+}

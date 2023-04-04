@@ -21,6 +21,12 @@ const teamSchema = Schema({
     },
     teamMembers:{
         type:Array
+    },
+    supervisor:{
+        type:Array
+    },
+    review:{
+        type: String,
     }
    
 }, { timestamps: true }

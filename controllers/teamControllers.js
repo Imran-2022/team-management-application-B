@@ -101,7 +101,7 @@ module.exports.updateSupervisorReview = async (req, res) => {
     const dt = req.body;
     // console.log(teamId,dt);
     try {
-        const updatedTeam = await Teams.findOneAndUpdate({ _id: teamId },{ review:dt.review });
+        const updatedTeam = await Teams.findOneAndUpdate({ _id: teamId }, { review: dt.review });
         if (!updatedTeam) {
             return res.status(404).send({ message: 'Team not found' });
         }
@@ -115,7 +115,7 @@ module.exports.addMeet = async (req, res) => {
     const teamId = req.params.id;
     const dt = req.body;
     // console.log(teamId,dt);
-    const meet = new Meet({scheduleNow:dt.scheduleNow,project_id:teamId});
+    const meet = new Meet({ scheduleNow: dt.scheduleNow, project_id: teamId });
     // console.log(meet);
     try {
         const result = await meet.save();
@@ -124,10 +124,25 @@ module.exports.addMeet = async (req, res) => {
         console.log(err.message, "err0r");
         return res.send({ error: err.message })
     }
-   
+
 }
 module.exports.getMeet = async (req, res) => {
     const _id = req.params.id;
-    const data = await Meet.findOne({project_id: _id })
+    const data = await Meet.findOne({ project_id: _id })
     res.send(data)
 }
+
+module.exports.deleteMeet = async (req, res) => {
+    const _id = req.params.id;
+
+    try {
+        const data = await Meet.findOneAndDelete({ project_id: _id });
+        if (!data) {
+            return res.status(404).send("Data not found");
+        }
+        res.send(data);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+};

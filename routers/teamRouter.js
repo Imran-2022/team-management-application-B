@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { addTeam, getTeams, deleteTeam, updateTeam, getTeam, updateSupervisor, updateSupervisorReview,getMeet,addMeet } = require('../controllers/teamControllers');
+const { addTeam, getTeams, deleteTeam, updateTeam, getTeam, updateSupervisor, updateSupervisorReview,getMeet,addMeet,deleteMeet } = require('../controllers/teamControllers');
 
 router.route('/')
     .get(getTeams)
@@ -18,6 +18,7 @@ router.route('/supervisor/status/:id')
 
 router.route('/meet/:id')
     .get(getMeet)
+    .delete(deleteMeet)
     .post(addMeet)
 
 module.exports = router;

@@ -29,3 +29,11 @@ module.exports.updateTaskStatus = async (req, res) => {
        return res.send(req.body)
     }
 }
+module.exports.deleteTask = async (req, res) => {
+    const id=req.params.id;
+    const result = await Tasks.deleteOne({_id:id})
+    // console.log(result);
+    if(result.deletedCount){
+        res.send({message:"delected Successfully !"})
+    }
+}

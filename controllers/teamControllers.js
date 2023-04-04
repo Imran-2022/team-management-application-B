@@ -53,19 +53,19 @@ module.exports.updateTeam = async (req, res) => {
         }
 
         // send mail that you are added !!! please login - 
-        if (updatedTeam) {
-            try {
-                await sendEmail({
-                    to: teamEmail,
-                    from: 'mdimranulhaque202@gmail.com',
-                    subject: 'you are added into a team named please login to see more -  !',
-                    html: `web url - ${`https://team-management-application.netlify.app/`}`,
-                })
-            } catch (err) {
-                console.log(err);
-                res.sendStatus(500);
-            }
-        }
+        // if (updatedTeam) {
+        //     try {
+        //         await sendEmail({
+        //             to: teamEmail,
+        //             from: 'mdimranulhaque202@gmail.com',
+        //             subject: 'you are added into a team named please login to see more -  !',
+        //             html: `web url - ${`https://team-management-application.netlify.app/`}`,
+        //         })
+        //     } catch (err) {
+        //         console.log(err);
+        //         res.sendStatus(500);
+        //     }
+        // }
 
         return res.status(200).send(newTeamMembers);
     } catch (error) {

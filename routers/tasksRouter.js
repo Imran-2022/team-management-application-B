@@ -1,4 +1,4 @@
-const { addTask, getTasks,updateTaskStatus,deleteTask } = require('../controllers/tasksControllers');
+const { addTask, getTasks, updateTaskStatus, deleteTask, getTask } = require('../controllers/tasksControllers');
 const router = require('express').Router();
 
 router.route('/')
@@ -6,6 +6,7 @@ router.route('/')
     .post(addTask)
 
 router.route('/:id')
+    .get(getTask)
     .patch(updateTaskStatus)
     .delete(deleteTask)
 

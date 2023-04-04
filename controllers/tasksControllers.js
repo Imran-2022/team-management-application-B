@@ -6,6 +6,12 @@ module.exports.getTasks = async (req, res) => {
     const tasks = await Tasks.find({})
     res.send(tasks)
 }
+module.exports.getTask = async (req, res) => {
+    const id=req.params.id
+    const task = await Tasks.find({_id:id})
+    console.log(task);
+    // res.send(task)
+}
 
 module.exports.addTask = async (req, res) => {
     // console.log(req.body);
